@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.xml.parsers.*;
 import org.w3c.dom.*;
@@ -60,6 +61,10 @@ public class Downloader {
 		this.m2 = Character.getNumericValue(date.charAt(3));
 		this.d1 = Character.getNumericValue(date.charAt(4));
 		this.d2 = Character.getNumericValue(date.charAt(5));
+		int year = Calendar.getInstance().get(Calendar.YEAR);
+		int ad2 = year%10;
+		year = year/10;
+		int ad1 = year%10;
 		this.firstCheck = true; // for first query the number of directory in
 								// year is unknown,so there is need to find
 								// directory with valid date
@@ -70,6 +75,7 @@ public class Downloader {
 
 				this.question = "http://www.nbp.pl/kursy/xml/c" + this.i + "" + this.j + "" + this.k + "z" + date
 						+ ".xml";
+				System.out.println(this.question +ad1 + ad2 );
 				try {
 
 					this.doc = builder.parse(this.question);
@@ -144,9 +150,14 @@ public class Downloader {
 	}
 
 	BigDecimal mean(BigDecimal averge, BigDecimal divider) {
+		try{
 		averge = averge.divide(divider, 4);
 
 		return averge;
+		}catch(java.lang.ArithmeticException e){
+			BigDecimal zero = new BigDecimal(0);
+			return zero;
+		}
 	}
 
 	private BigDecimal standardDeviation(BigDecimal averge, ArrayList<BigDecimal> list, BigDecimal divider) {
@@ -158,10 +169,13 @@ public class Downloader {
 			temp = temp.pow(2);
 			sumOfDeviation = sumOfDeviation.add(temp);
 		}
+		try{
 		sumOfDeviation = sumOfDeviation.divide(divider, 8, RoundingMode.HALF_UP);
 		sumOfDeviation = squareRoot(sumOfDeviation);
 		sumOfDeviation = sumOfDeviation.setScale(4, RoundingMode.HALF_UP);
-
+		}catch( java.lang.ArithmeticException e){
+			sumOfDeviation = new BigDecimal(0);
+		}
 		return sumOfDeviation;
 
 	}
