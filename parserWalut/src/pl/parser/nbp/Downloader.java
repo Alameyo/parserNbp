@@ -49,7 +49,11 @@ public class Downloader {
 		factory = DocumentBuilderFactory.newInstance();
 		builder = factory.newDocumentBuilder();
 	}
-
+	/**
+	 * Checks urls from beginning date to end date, save XML from url into  document
+	 * and take information from document by toParse method. At the end count mean
+	 * and standard deviation from this information.
+	 */
 	void download(String kodWaluty, String dataPoczatku, String dataKonca)
 			throws ParserConfigurationException, SAXException {
 		this.date = dataPoczatku;
@@ -97,7 +101,7 @@ public class Downloader {
 
 					this.firstCheck = false; // stop searching for number of
 												// document with provided
-												// begining date
+												// beginning date
 					break;
 
 				} catch (IOException e) {
@@ -160,6 +164,13 @@ public class Downloader {
 		}
 	}
 
+	/**
+	 * Count standard deviation
+	 * @param averge
+	 * @param list
+	 * @param divider
+	 * @return
+	 */
 	private BigDecimal standardDeviation(BigDecimal averge, ArrayList<BigDecimal> list, BigDecimal divider) {
 
 		BigDecimal temp = new BigDecimal(0);
@@ -180,28 +191,37 @@ public class Downloader {
 
 	}
 
-	// implemetation of square root of BigDecimal
+	/**
+	 *  implementation of square root of BigDecimal
+	 * @param div
+	 * @return div
+	 */
 	private BigDecimal squareRoot(BigDecimal div) {
 		div = new BigDecimal(Math.sqrt(div.doubleValue()));
 		return div;
 	}
 
-	// change day for next day
+	/**
+	 *  change day for next day
+	 */
 	void dateProgress() {
 		this.d2++;
 		if (this.d2 >= 10) {
 			this.d1++;
 			this.d2 = 0;
-			if (this.d1 >= 4) {
+			}
+		if (this.d1>=3 && this.d2>2){
+				
 				this.m2++;
 				this.d1 = 0;
+				this.d2 =1;
 				if (this.m1 == 1 && this.m2 > 2) {
 					this.y2++;
 					this.m1 = 0;
 					this.i = 0;
 					this.j = 0;
 					this.k = 1;
-					this.d2 = 1;
+					
 					this.m2 = 1;
 					if (this.y2 >= 10) {
 						this.y1++;
@@ -212,7 +232,7 @@ public class Downloader {
 					this.m1++;
 					this.m2 = 0;
 				}
-			}
+			
 		}
 		this.date = "" + this.y1 + "" + this.y2 + "" + this.m1 + "" + this.m2 + "" + this.d1 + "" + this.d2;
 	}
