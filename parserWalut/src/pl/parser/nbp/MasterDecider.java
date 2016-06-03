@@ -21,7 +21,12 @@ public class MasterDecider {
 
 	// pattern of input
 	private Pattern pattern = Pattern.compile("[A-Z]{3} [0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{4}-[0-9]{2}-[0-9]{2}");
-
+	/**
+	 * Check if user input is valid and then translate user's input into 
+	 * code of currency, date of first query, last query
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 */
 	public void masterTranslator() throws ParserConfigurationException, SAXException {
 		boolean inputing = true;
 		Scanner inputCode = new Scanner(System.in);
@@ -66,8 +71,13 @@ public class MasterDecider {
 	public String getDataPoczatku() {
 		return dataPoczatku;
 	}
-
-	boolean checkDateProgress(String beginDate, String endDate) {
+	/**
+	 * Check if date of end of the query is later than beginning of the query.
+	 * @param beginDate
+	 * @param endDate
+	 * @return
+	 */
+	private boolean checkDateProgress(String beginDate, String endDate) {
 		boolean badIn;
 		if (Integer.valueOf(beginDate) > Integer.valueOf(endDate)) {
 			badIn = true;

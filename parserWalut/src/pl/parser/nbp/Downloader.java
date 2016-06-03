@@ -152,7 +152,12 @@ public class Downloader {
 		BigDecimal deviation = standardDeviation(mean2, listOfSell, divider);
 		System.out.println(deviation);
 	}
-
+	/**
+	 * Count mean of input
+	 * @param averge
+	 * @param divider
+	 * @return averge
+	 */
 	BigDecimal mean(BigDecimal averge, BigDecimal divider) {
 		try{
 		averge = averge.divide(divider, 4);
