@@ -37,14 +37,14 @@ public class Downloader {
 	private boolean firstCheck;
 
 	Downloader() throws ParserConfigurationException {
-		this.sumOfbuy = new BigDecimal(0);
-		this.sumOfSell = new BigDecimal(0);
-		this.divider = new BigDecimal(0);
-		this.listOfSell = new ArrayList<BigDecimal>();
-		this.question = null;
-		this.i = 0; // number of directory in year
-		this.j = 0;
-		this.k = 1;
+		sumOfbuy = new BigDecimal(0);
+		sumOfSell = new BigDecimal(0);
+		divider = new BigDecimal(0);
+		listOfSell = new ArrayList<BigDecimal>();
+		question = null;
+		i = 0; // number of directory in year
+		j = 0;
+		k = 1;
 		parser1 = new Parser();
 		factory = DocumentBuilderFactory.newInstance();
 		builder = factory.newDocumentBuilder();
@@ -57,49 +57,49 @@ public class Downloader {
 	void download(String kodWaluty, String dataPoczatku, String dataKonca)
 			throws ParserConfigurationException, SAXException {
 		this.date = dataPoczatku;
-		this.y1 = Character.getNumericValue(date.charAt(0)); // getting value of
+		y1 = Character.getNumericValue(date.charAt(0)); // getting value of
 																// date from
 																// String
-		this.y2 = Character.getNumericValue(date.charAt(1));
-		this.m1 = Character.getNumericValue(date.charAt(2));
-		this.m2 = Character.getNumericValue(date.charAt(3));
-		this.d1 = Character.getNumericValue(date.charAt(4));
-		this.d2 = Character.getNumericValue(date.charAt(5));
+		y2 = Character.getNumericValue(date.charAt(1));
+		m1 = Character.getNumericValue(date.charAt(2));
+		m2 = Character.getNumericValue(date.charAt(3));
+		d1 = Character.getNumericValue(date.charAt(4));
+		d2 = Character.getNumericValue(date.charAt(5));
 		int year = Calendar.getInstance().get(Calendar.YEAR);
 		int ad2 = year%10;
 		year = year/10;
 		int ad1 = year%10;
-		this.firstCheck = true; // for first query the number of directory in
+		firstCheck = true; // for first query the number of directory in
 								// year is unknown,so there is need to find
 								// directory with valid date
 		do {
-			this.found = false;
+			found = false;
 
-			while (this.found == false && i < 3) {
+			while (found == false && i < 3) {
 
-				this.question = "http://www.nbp.pl/kursy/xml/c" + this.i + "" + this.j + "" + this.k + "z" + date
+				question = "http://www.nbp.pl/kursy/xml/c" + i + "" + j + "" + k + "z" + date
 						+ ".xml";
-				System.out.println(this.question +ad1 + ad2 );
+				System.out.println(question +ad1 + ad2 );
 				try {
 
-					this.doc = builder.parse(this.question);
-					this.parser1.toParse(doc, kodWaluty);
-					this.found = true;
-					this.divider = this.divider.add(new BigDecimal(1));
-					this.sumOfbuy = this.sumOfbuy.add(parser1.getBigOneBuy());
-					this.sumOfSell = this.sumOfSell.add(parser1.getBigOneSell());
-					this.listOfSell.add(parser1.getBigOneSell());
-					this.k++; // change number of document in year
-					if (this.k >= 10) {
-						this.k = 0;
-						this.j++;
-						if (this.j >= 10) {
-							this.j = 0;
-							this.i++;
+					doc = builder.parse(question);
+					parser1.toParse(doc, kodWaluty);
+					found = true;
+					divider = divider.add(new BigDecimal(1));
+					sumOfbuy = sumOfbuy.add(parser1.getBigOneBuy());
+					sumOfSell = sumOfSell.add(parser1.getBigOneSell());
+					listOfSell.add(parser1.getBigOneSell());
+					k++; // change number of document in year
+					if (k >= 10) {
+						k = 0;
+						j++;
+						if (j >= 10) {
+							j = 0;
+							i++;
 						}
 					}
 
-					this.firstCheck = false; // stop searching for number of
+					firstCheck = false; // stop searching for number of
 												// document with provided
 												// beginning date
 					break;
@@ -108,14 +108,14 @@ public class Downloader {
 					// in case that document wasn't found at that address and
 					// algorithm is searching for first document since given
 					// date
-					if (this.firstCheck == true) {
-						this.k++;
-						if (this.k >= 10) {
-							this.k = 0;
-							this.j++;
-							if (this.j >= 10) {
-								this.j = 0;
-								this.i++;
+					if (firstCheck == true) {
+						k++;
+						if (k >= 10) {
+							k = 0;
+							j++;
+							if (j >= 10) {
+								j = 0;
+								i++;
 							}
 						}
 					} else {
@@ -123,32 +123,32 @@ public class Downloader {
 					}
 				}
 			}
-			if (this.firstCheck == true) {
-				this.i = 0;
-				this.j = 0;
-				this.k = 1;
+			if (firstCheck == true) {
+				i = 0;
+				j = 0;
+				k = 1;
 			}
 			dateProgress();
 		} while (date.compareTo(dataKonca) < 0);
 		// last query which is out of loop
 		if (dataPoczatku.equals(dataKonca) == false) {
-			this.question = "http://www.nbp.pl/kursy/xml/c" + this.i + "" + this.j + "" + this.k + "z" + dataKonca
+			question = "http://www.nbp.pl/kursy/xml/c" + i + "" + j + "" + k + "z" + dataKonca
 					+ ".xml";
 
 			try {
-				this.doc = builder.parse(this.question);
-				this.parser1.toParse(doc, kodWaluty);
-				this.found = true;
-				this.sumOfbuy = this.sumOfbuy.add(parser1.getBigOneBuy());
-				this.sumOfSell = this.sumOfSell.add(parser1.getBigOneSell());
-				this.listOfSell.add(parser1.getBigOneSell());
-				this.divider = this.divider.add(new BigDecimal(1));
+				doc = builder.parse(question);
+				parser1.toParse(doc, kodWaluty);
+				found = true;
+				sumOfbuy = sumOfbuy.add(parser1.getBigOneBuy());
+				sumOfSell = sumOfSell.add(parser1.getBigOneSell());
+				listOfSell.add(parser1.getBigOneSell());
+				divider = divider.add(new BigDecimal(1));
 			} catch (IOException e) {
 			}
 		}
-		BigDecimal mean1 = mean(this.sumOfbuy, this.divider);
+		BigDecimal mean1 = mean(sumOfbuy, divider);
 		System.out.println(mean1);
-		BigDecimal mean2 = mean(this.sumOfSell, this.divider);
+		BigDecimal mean2 = mean(sumOfSell, divider);
 		BigDecimal deviation = standardDeviation(mean2, listOfSell, divider);
 		System.out.println(deviation);
 	}
@@ -210,35 +210,35 @@ public class Downloader {
 	 *  change day for next day
 	 */
 	void dateProgress() {
-		this.d2++;
-		if (this.d2 >= 10) {
-			this.d1++;
-			this.d2 = 0;
+		d2++;
+		if (d2 >= 10) {
+			d1++;
+			d2 = 0;
 			}
-		if (this.d1>=3 && this.d2>2){
+		if (d1>=3 && d2>2){
 				
-				this.m2++;
-				this.d1 = 0;
-				this.d2 =1;
-				if (this.m1 == 1 && this.m2 > 2) {
-					this.y2++;
-					this.m1 = 0;
-					this.i = 0;
-					this.j = 0;
-					this.k = 1;
+				m2++;
+				d1 = 0;
+				d2 =1;
+				if (m1 == 1 && m2 > 2) {
+					y2++;
+					m1 = 0;
+					i = 0;
+					j = 0;
+					k = 1;
 					
-					this.m2 = 1;
-					if (this.y2 >= 10) {
-						this.y1++;
-						this.y2 = 0;
+					m2 = 1;
+					if (y2 >= 10) {
+						y1++;
+						y2 = 0;
 					}
 				}
-				if (this.m2 >= 10) {
-					this.m1++;
-					this.m2 = 0;
+				if (m2 >= 10) {
+					m1++;
+					m2 = 0;
 				}
 			
 		}
-		this.date = "" + this.y1 + "" + this.y2 + "" + this.m1 + "" + this.m2 + "" + this.d1 + "" + this.d2;
+		date = "" + y1 + "" + y2 + "" + m1 + "" + m2 + "" + d1 + "" + d2;
 	}
 }

@@ -18,8 +18,8 @@ private BigDecimal bigOneSell;
 
 
 	public void toParse(Document doc, String code) {
-		this.bigOneBuy = new BigDecimal(0);
-		this.bigOneSell = new BigDecimal(0);
+		bigOneBuy = new BigDecimal(0);
+		bigOneSell = new BigDecimal(0);
 		NodeList pozycjaList = doc.getElementsByTagName("pozycja");
 		for (int temp = 0; temp < pozycjaList.getLength(); temp++) {
 			Node node1 = pozycjaList.item(temp);
@@ -33,11 +33,11 @@ private BigDecimal bigOneSell;
 			
 			String valueNowStrBuy = (String)theElement.getElementsByTagName("kurs_kupna").item(0).getTextContent();
 			valueNowStrBuy=valueNowStrBuy.replace(',', '.');
-			this.bigOneBuy = this.bigOneBuy.add(new BigDecimal(valueNowStrBuy));
+			bigOneBuy = this.bigOneBuy.add(new BigDecimal(valueNowStrBuy));
 			
 			String valueNowStrSell = (String)theElement.getElementsByTagName("kurs_sprzedazy").item(0).getTextContent();
 			valueNowStrSell = valueNowStrSell.replace(',', '.');
-			this.bigOneSell = this.bigOneSell.add(new BigDecimal(valueNowStrSell));
+			bigOneSell = this.bigOneSell.add(new BigDecimal(valueNowStrSell));
 			}
 			}
 

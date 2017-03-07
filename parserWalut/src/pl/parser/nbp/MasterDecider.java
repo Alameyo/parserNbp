@@ -33,7 +33,7 @@ public class MasterDecider {
 		while (inputing == true) {
 
 			try {
-				// query have to be inputed in pattern WWW RRRR-MM-DD RRRR-MM-DD
+				// query have to be inputed in pattern WWW YYYY-MM-DD YYYY-MM-DD
 				// for example EUR 2013-01-28 2013-01-31
 				query = inputCode.nextLine(); // inputing of data from user
 
@@ -80,11 +80,10 @@ public class MasterDecider {
 	private boolean checkDateProgress(String beginDate, String endDate) {
 		boolean badIn;
 		if (Integer.valueOf(beginDate) > Integer.valueOf(endDate)) {
-			badIn = true;
+			return true;
 		} else {
-			badIn = false;
+			return false;
 		}
-		return badIn;
 
 	}
 }
